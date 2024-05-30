@@ -82,7 +82,7 @@ LINK_ONLY_FLAGS = {
     '--emit-symbol-map', '--emrun', '--exclude-file', '--extern-post-js',
     '--extern-pre-js', '--ignore-dynamic-linking', '--js-library',
     '--js-transform', '--oformat', '--output_eol',
-    '--post-js', '--pre-js', '--preload-file', '--preload-basename',
+    '--post-js', '--pre-js', '--preload-file', '--preload-name',
     '--profiling-funcs', '--proxy-to-worker', '--shell-file',
     '--source-map-base', '--threadprofiler', '--use-preload-plugins'
 }
