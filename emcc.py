@@ -82,9 +82,9 @@ LINK_ONLY_FLAGS = {
     '--emit-symbol-map', '--emrun', '--exclude-file', '--extern-post-js',
     '--extern-pre-js', '--ignore-dynamic-linking', '--js-library',
     '--js-transform', '--oformat', '--output_eol',
-    '--post-js', '--pre-js', '--preload-file', '--profiling-funcs',
-    '--proxy-to-worker', '--shell-file', '--source-map-base',
-    '--threadprofiler', '--use-preload-plugins'
+    '--post-js', '--pre-js', '--preload-file', '--preload-basename',
+    '--profiling-funcs', '--proxy-to-worker', '--shell-file',
+    '--source-map-base', '--threadprofiler', '--use-preload-plugins'
 }
 
 
@@ -146,6 +146,7 @@ class EmccOptions:
     self.extern_pre_js = [] # before all js, external to optimized code
     self.extern_post_js = [] # after all js, external to optimized code
     self.preload_files = []
+    self.preload_name = None
     self.embed_files = []
     self.exclude_files = []
     self.ignore_dynamic_linking = False
@@ -1281,6 +1282,8 @@ def parse_args(newargs):
       options.embed_files.append(consume_arg())
     elif check_arg('--preload-file'):
       options.preload_files.append(consume_arg())
+    elif check_arg('--preload-name'):
+      options.preload_name = consume_arg()
     elif check_arg('--exclude-file'):
       options.exclude_files.append(consume_arg())
     elif check_flag('--use-preload-cache'):

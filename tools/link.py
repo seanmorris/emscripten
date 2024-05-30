@@ -2991,9 +2991,12 @@ def package_files(options, target):
   rtn = []
   logger.debug('setting up files')
   file_args = ['--from-emcc']
+  target_path = shared.replace_suffix(target, '.data')
   if options.preload_files:
     file_args.append('--preload')
     file_args += options.preload_files
+    if(options.preload_name):
+      target_path = os.path.join(os.path.dirname(target_path), options.preload_name + '.data')
   if options.embed_files:
     file_args.append('--embed')
     file_args += options.embed_files
@@ -3014,8 +3017,11 @@ def package_files(options, target):
     object_file = in_temp('embedded_files.o')
     file_args += ['--obj-output=' + object_file]
     rtn.append(object_file)
-
-  cmd = [shared.FILE_PACKAGER, shared.replace_suffix(target, '.data')] + file_args
+  
+  print(repr(target_path))
+  print(repr(file_args))
+  
+  cmd = [shared.FILE_PACKAGER, target_path] + file_args
   if options.preload_files:
     # Preloading files uses --pre-js code that runs before the module is loaded.
     file_code = shared.check_call(cmd, stdout=PIPE).stdout
