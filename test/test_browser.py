@@ -5612,6 +5612,35 @@ Module["preRun"] = () => {
         return self.run_browser('a.out.html', '/report_result?1')
       else:
          return self.run_browser('a.out.html', '/report_result?1')
+  
+  def test_fetch_polyfill_shared_lib(self):
+    create_file('library.c', r'''
+      #include <stdio.h>
+      int library_func() {
+        return 42;
+      }
+    ''')
+    create_file('main.c', r'''
+      #include <dlfcn.h>
+      #include <stdio.h>
+      int main() {
+        void *lib_handle = dlopen("/library.so", RTLD_NOW);
+        typedef int (*voidfunc)();
+        voidfunc x = (voidfunc)dlsym(lib_handle, "library_func");
+        return x();
+      }
+    ''')
+
+    self.run_process([EMCC, 'library.c', '-sSIDE_MODULE', '-O2', '-o', 'library.so'])
+
+    def test(args, expect_fail):
+      self.compile_btest('main.c', ['library.so', '-sMAIN_MODULE=2', '-sEXIT_RUNTIME', '-o', 'a.out.html'] + args)
+      if expect_fail:
+        js = read_file('a.out.js')
+        create_file('a.out.js', 'fetch = undefined;\n' + js)
+        return self.run_browser('a.out.html', '/report_result?abort:TypeError')
+      else:
+        return self.run_browser('a.out.html', '/report_result?exit:42')
 
     test([], expect_fail=True)
     test(['-sLEGACY_VM_SUPPORT'], expect_fail=False)
