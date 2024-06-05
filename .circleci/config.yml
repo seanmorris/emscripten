@@ -715,6 +715,7 @@ jobs:
       - run:
           name: submodule update
           command: git submodule update --init
+      - pip-install
       - run-tests:
           title: "node (canary)"
           test_targets: "
