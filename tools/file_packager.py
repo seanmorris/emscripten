@@ -773,7 +773,10 @@ def generate_js(data_target, data_files, metadata):
         Module['locateFile'] = Module['locateFilePackage'];
         err('warning: you defined Module.locateFilePackage, that has been renamed to Module.locateFile (using your locateFilePackage for now)');
       }
-      var REMOTE_PACKAGE_NAME = Module['locateFile'] ? Module['locateFile'](REMOTE_PACKAGE_BASE, '') : REMOTE_PACKAGE_BASE;\n''' % (js_manipulation.escape_for_js_string(data_target), js_manipulation.escape_for_js_string(remote_package_name))
+      var REMOTE_PACKAGE_NAME = Module['locateFile']
+        ? (Module['locateFile'](REMOTE_PACKAGE_BASE, '') ?? REMOTE_PACKAGE_BASE)
+        : REMOTE_PACKAGE_BASE;
+    ''' % (js_manipulation.escape_for_js_string(data_target), js_manipulation.escape_for_js_string(remote_package_name))
     metadata['remote_package_size'] = remote_package_size
     ret += '''      var REMOTE_PACKAGE_SIZE = metadata['remote_package_size'];\n'''
 

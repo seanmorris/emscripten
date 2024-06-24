@@ -202,16 +202,16 @@ if (ENVIRONMENT_IS_WORKER) {
 
 // `/` should be present at the end if `scriptDirectory` is not empty
 var scriptDirectory = '';
-function locateFile(path) {
+function locateFile(path, defaultPath = null) {
 #if RUNTIME_DEBUG
   dbg('locateFile:', path, 'scriptDirectory:', scriptDirectory);
 #endif
 #if expectToReceiveOnModule('locateFile')
   if (Module['locateFile']) {
-    return Module['locateFile'](path, scriptDirectory);
+    return Module['locateFile'](path, scriptDirectory) ?? defaultPath ?? scriptDirectory + path;
   }
 #endif
-  return scriptDirectory + path;
+  return defaultPath ?? scriptDirectory + path;
 }
 
 // Hooks that are implemented differently in different runtime environments.
