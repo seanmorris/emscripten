@@ -1011,6 +1011,7 @@ def generate_js(data_target, data_files, metadata):
             Module['setStatus']?.('Downloading data...');
             return iterate();
           });
+      }
       
       function handleError(error) {
         console.error('package error:', error);
