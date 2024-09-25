@@ -1011,12 +1011,10 @@ def generate_js(data_target, data_files, metadata):
             Module['setStatus']?.('Downloading data...');
             return iterate();
           });
-      };\n''' % {'node_support_code': node_support_code}
-
-    ret += '''
+      
       function handleError(error) {
         console.error('package error:', error);
-      };\n'''
+      };\n''' % {'node_support_code': node_support_code}
 
     code += '''
       function processPackageData(arrayBuffer) {
