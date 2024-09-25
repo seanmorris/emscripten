@@ -1012,7 +1012,7 @@ def generate_js(data_target, data_files, metadata):
             return iterate();
           });
       }
-      
+
       function handleError(error) {
         console.error('package error:', error);
       };\n''' % {'node_support_code': node_support_code}
