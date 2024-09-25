@@ -1011,68 +1011,6 @@ def generate_js(data_target, data_files, metadata):
             Module['setStatus']?.('Downloading data...');
             return iterate();
           });
-      };
-
-          let loaded = 0;
-
-          if (!response.ok) {
-            return Promise.reject(new Error(response.statusText + ' : ' + response.url));
-          }
-
-          // If we're using the polyfill, readers won't be available...
-          if(!response.body && response.arrayBuffer) {
-            response.arrayBuffer().then(buffer => callback(buffer));
-            return;
-          }
-
-          const reader = response.body.getReader();
-          const headers = response.headers;
-
-          const size = headers.get('Content-Length') ?? packageSize;
-          const chunks = [];
-
-          const iterate = () => reader.read().then(handleChunk).catch(cause => {
-            return Promise.reject(new Error('Unexpected error while handling : ' + response.url + ' ' + cause, {cause}));
-          });
-
-          const handleChunk = ({done, value}) => {
-            if (!done) {
-              chunks.push(value);
-              loaded += value.length;
-              Module.dataFileDownloads[url] = Module.dataFileDownloads[url] ?? {};
-              Module.dataFileDownloads[url].loaded = loaded;
-              Module.dataFileDownloads[url].total = size;
-
-              let totalLoaded = 0;
-              let totalSize = 0;
-
-              for (const dowload of Object.values(Module.dataFileDownloads)) {
-                totalLoaded += dowload.loaded;
-                totalSize += dowload.total;
-              }
-
-              if (totalSize) {
-                if (Module['setStatus']) Module['setStatus'](`Downloading data... (${totalLoaded}/${totalSize})`);
-              }
-              else {
-                if (Module['setStatus']) Module['setStatus']('Downloading data...');
-              }
-              return iterate();
-            }
-            else {
-              const size = chunks.map(c => c.length).reduce((a, b) => a + b, 0);
-              let index = 0;
-              const packageData = new Uint8Array(size);
-              for(const chunk of chunks) {
-                packageData.set(chunk, index);
-                index += chunk.length;
-              }
-
-              callback(packageData.buffer);
-            }
-          };
-          return iterate();
-        });
       };\n''' % {'node_support_code': node_support_code}
 
     ret += '''
