@@ -681,7 +681,7 @@ function getBinaryPromise(binaryFile) {
       });
     }
 #endif
-      ) {
+
     // Fetch the binary using readAsync
     return readAsync(binaryFile).then(
       (response) => new Uint8Array(/** @type{!ArrayBuffer} */(response)),
