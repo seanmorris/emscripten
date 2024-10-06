@@ -2979,7 +2979,7 @@ def package_files(options, target):
     file_args.append('--preload')
     file_args += options.preload_files
     if(options.preload_name):
-      target_path = os.path.join(os.path.dirname(target_path), options.preload_name + '.data')
+      target_path = os.path.join(os.path.dirname(target), options.preload_name + '.data')
   if options.embed_files:
     file_args.append('--embed')
     file_args += options.embed_files
