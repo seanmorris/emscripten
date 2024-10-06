@@ -3001,7 +3001,7 @@ def package_files(options, target):
     file_args += ['--obj-output=' + object_file]
     rtn.append(object_file)
 
-  cmd = [shared.FILE_PACKAGER, shared.replace_suffix(target, '.data')] + file_args
+  cmd = [shared.FILE_PACKAGER, shared.replace_suffix(target_path, '.data')] + file_args
   if options.preload_files:
     # Preloading files uses --pre-js code that runs before the module is loaded.
     file_code = shared.check_call(cmd, stdout=PIPE).stdout
