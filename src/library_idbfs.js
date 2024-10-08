@@ -248,7 +248,9 @@ addToLibrary({
       }
     },
     storeLocalEntry: (path, entry, callback) => {
+      const previousIgnore = FS.ignorePermissions;
       try {
+        FS.ignorePermissions = true;
         if (FS.isDir(entry['mode'])) {
           FS.mkdirTree(path, entry['mode']);
         } else if (FS.isFile(entry['mode'])) {
@@ -261,6 +263,9 @@ addToLibrary({
         FS.utime(path, entry['timestamp'], entry['timestamp']);
       } catch (e) {
         return callback(e);
+      }
+      finally {
+        FS.ignorePermissions = previousIgnore;
       }
 
       callback(null);
